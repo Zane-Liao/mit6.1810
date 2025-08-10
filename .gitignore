@@ -9,6 +9,7 @@ vectors.S
 bootblock
 entryother
 initcode
+user/.user.h.swp
 initcode.out
 kernelmemfs
 mkfs/mkfs
