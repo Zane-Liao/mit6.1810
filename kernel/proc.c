@@ -320,6 +320,7 @@ fork(void)
 
   acquire(&np->lock);
   np->state = RUNNABLE;
+  np->syscallnum = p->syscallnum;
   release(&np->lock);
 
   return pid;
@@ -692,4 +693,16 @@ procdump(void)
     printf("%d %s %s", p->pid, state, p->name);
     printf("\n");
   }
+}
+
+int
+nproc_active()
+{
+  int i = 0;
+  int num = 0;
+  for(i = 0; i<NPROC; i++){
+    if(proc[i].state != UNUSED)
+	  num++;
+  }
+  return num;
 }

@@ -8,6 +8,9 @@ _*
 vectors.S
 bootblock
 entryother
+user/.user.h.swp
+/.vscode
+.DS_Store
 initcode
 initcode.out
 kernelmemfs
