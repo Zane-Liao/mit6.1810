@@ -123,3 +123,35 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+#ifdef LAB_PGTBL
+int
+sys_pgaccess(void)
+{
+  struct proc *p = myproc();
+  uint64 base, mask;
+  int val, pagenum = 0;
+
+  argaddr(0, &base);
+  argint(1, &pagenum);
+  argaddr(2, &mask);
+
+  for(int i=0;i<pagenum;i++){
+    pte_t* pte = walk(p->pagetable, base, 1);
+    if(pte == 0) continue;
+
+    if((*pte) & PTE_A){
+      val |= 1 << i;
+      *pte ^= PTE_A;
+    }
+  
+    base += PGSIZE;
+  }
+
+  if(copyout(p->pagetable, mask, (char *) &val, sizeof(val)) < 0){
+    return -1;
+  }
+
+  return 0;
+}
+#endif
