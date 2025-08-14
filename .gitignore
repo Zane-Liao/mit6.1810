@@ -17,6 +17,7 @@ user/usys.S
 .gdbinit
 *.zip
 xv6.out*
+/.vscode
 .vagrant/
 submissions/
 ph
