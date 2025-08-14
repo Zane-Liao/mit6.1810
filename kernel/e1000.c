@@ -101,8 +101,19 @@ e1000_transmit(char *buf, int len)
   // the TX descriptor ring so that the e1000 sends it. Stash
   // a pointer so that it can be freed after send completes.
   //
+  acquire(&e1000_lock);
 
-  
+  int index = regs[E1000_TDT];
+  if(index >= TX_RING_SIZE){
+    release(&e1000_lock);
+    return -1;
+  }
+
+  if(tx_ring[index].status & E1000_TXD_STAT_DD == 0){
+    release(&e1000_lock);
+    return -1;
+  }
+  // ...
   return 0;
 }
 
@@ -115,6 +126,10 @@ e1000_recv(void)
   // Check for packets that have arrived from the e1000
   // Create and deliver a buf for each packet (using net_rx()).
   //
+  while(1){
+    int index = (regs[E1000_RDT] + 1) % RX_RING_SIZE;
+    //...
+  }
 
 }
 
